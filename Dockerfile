@@ -6,7 +6,12 @@ ADD spring-boot-todomvc/ /app
 
 WORKDIR /app/
 
-RUN ./gradlew build
+ENV GRADLE_USER_HOME=gradle
+
+#build & delete everything other than build result
+RUN ./gradlew build \
+    &&  find . -type f -not -name 'spring-boot-todomvc.jar' | xargs rm  \
+    &&  find . -type d -empty -delete # delete empty folders
 
 EXPOSE  8080
 

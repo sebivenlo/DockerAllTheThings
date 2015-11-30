@@ -1,12 +1,35 @@
-# DockerAllTheThings
-An introduction to docker
 
-##why?
-|  advantages: | |
+#DockerAllTheThings
+
+[slides](https://sebivenlo.github.io/DockerAllTheThings/)
+
+
+##how?
+
+**aufs**
+
+union file system
+
+**image**
+
+read-only template
+
+**container**
+
+ Each container is created from a Docker image.
+ Docker containers can be run, started, stopped, moved, and deleted.
+
+ **docker daemon**
+
+  [LXC](http://en.wikipedia.org/wiki/Lxc) -> [runc](https://github.com/opencontainers/runc)
+
+
+###advantages
+| advantages| |
 |---|---|
 | isolation  |  no interference |
 | layers | images can share parts with each other
-| fast  |  docker startup: **2sec** virtualbox startup: **35sec** |
+| fast  |  docker startup: **2sec** <br>virtualbox startup: **35sec** |
 |  dependencies | easy to have multiple versions of same library |
 | versioning | easy tracking of configuration and dependencies
 | production | local development very close to production
@@ -14,28 +37,26 @@ An introduction to docker
 
 ---
 
-##what?
-**aufs**
-union file system
-**image**
-read-only template, ex. Ubuntu + Apache + Java + Application
-**container**
- Each container is created from a Docker image.
- Docker containers can be run, started, stopped, moved, and deleted.
- **docker daemon**
-  [LXC](http://en.wikipedia.org/wiki/Lxc) -> [runc](https://github.com/opencontainers/runc)
+##setup
 
----
 
-##Setup
+Linux:
 
-Linux: `wget -qO- https://get.docker.com/ | sh`
-Mac OSX:  [**do a bunch of Stuff**](http://docs.docker.com/mac/started/)
-Windows: **[do a bunch of more Stuff](http://docs.docker.com/windows/started/)**
+ `wget -qO- https://get.docker.com/ | sh`
+
+Mac OSX:
+
+[**do a bunch of Stuff**](http://docs.docker.com/mac/step_one/)
+
+Windows:
+
+ **[do a bunch of more Stuff](http://docs.docker.com/windows/step_one/)**
 
 ---
 
 ##getting started
+
+
 ### Dockerfile
 Docker uses Dockerfiles to build containers.
 Every command in the Dockerfile creates a new layer in the filesystem.
@@ -54,9 +75,9 @@ our Docker file looks like this:
 
 	EXPOSE  8080
 
-	CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","build/libs/spring-boot-todomvc.jar"]
+	CMD ["java","-Djava.security.egd=file:/dev/./urandom",
+    "-jar","build/libs/spring-boot-todomvc.jar"]
 
----
 
 #### Syntax
 - `FROM` - Base image which you build upon (ex. [java](https://github.com/docker-library/java/blob/200ecf22e5a23cb48cbb3ce47aa08aa3b49a0d2d/openjdk-8-jdk/Dockerfile), [ubuntu](https://github.com/tianon/docker-brew-ubuntu-core/blob/6dba3ee12ff996640d1043139d5abf8c744862e2/trusty/Dockerfile)
@@ -67,23 +88,30 @@ our Docker file looks like this:
 - `CMD` - default command to run when you start a container
 
 
----
 
-###Build & run
-- `docker build -t app-demo .`  - builds an image from a given Dockerfile
-- `docker images` - lists all images you created with docker
-- `docker run -i -p 8080:8080 -t app-demo` - starts a container with the given id or tag
-- `docker ps -l` - list all containers
+###build & run
+`docker build -t app-demo .`
+- builds an image from a given Dockerfile
 
-to connect multiple containers you could run
+`docker images`
+ - lists all images you created with docker
+
+`docker run -i -p 8080:8080 -t app-demo`
+- starts a container with the given id or tag
+
+`docker ps -l`
+- list all containers
+
+
+to connect multiple containers you *could* run
 `docker run -d -p 8080:8080 --name app --env spring.profiles.active=production --link db -t app-demo`
+
 **or** use `docker-compose`
 
 
----
 
-### Docker-compose
-fast way to run existing images 	
+### docker-compose
+fast way to run existing images
 
 	 app:
 	  image: java:8
@@ -110,18 +138,34 @@ fast way to run existing images
 	  expose:
 	    - 5432
 
----
+
+
 **run**
-`docker-compose up -d` start all services in daemon mode
-`docker-compose run --service-ports db`
+
+`docker-compose up -d`
+
+starts all services in daemon mode
+
+
+
 `docker-compose run --service-ports app`
+
+starts one service in interactive mode
+
+
+
+`docker-compose run --service-ports db bash`
+
+starts containter with interactive bash instead of run command
+
 
 **easy  scaling**
 ` docker-compose scale web=2 worker=3`
 
-more scaling ....
 
-### docker swarm
+for more scaling ...
+## docker swarm
+
 
 [video](https://embed-ssl.wistia.com/deliveries/2a0f6a5e1b77423d85b501aea668b664d4609b1f/file.mp4)
 
@@ -145,7 +189,7 @@ more scaling ....
 - delete all containers `docker rm $(docker ps -a -q)`
 - delete all images `docker rmi $(docker images -q)`
 
-
+---
 
 
 ### resources

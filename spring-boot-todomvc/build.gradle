@@ -16,10 +16,11 @@ apply plugin: 'spring-boot'
 apply plugin: 'war'
 
 
-war {
+jar {
     baseName = 'spring-boot-todomvc'
     version = ''
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
