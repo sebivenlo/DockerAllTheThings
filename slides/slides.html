@@ -27,27 +27,8 @@ name: image
 
 layout: false
 .left-column[
-##why?
-]
-.right-column[
-###advantages
-|  | |
-|---|---|
-| isolation  |  no interference |
-| layers | images can share parts with each other
-| fast  |  docker startup: **2sec** <br>virtualbox startup: **35sec** |
-|  dependencies | easy to have multiple versions of same library |
-| versioning | easy tracking of configuration and dependencies
-| production | local development very close to production
-]
-
----
-layout: false
-.left-column[
-##why?
 ##how?
 ]
-
 .right-column[
 
 **aufs**
@@ -56,7 +37,7 @@ union file system
 
 **image**
 
-read-only template, ex. Ubuntu + Apache + Java + Application
+read-only template
 
 **container**
 
@@ -67,11 +48,34 @@ read-only template, ex. Ubuntu + Apache + Java + Application
 
   [LXC](http://en.wikipedia.org/wiki/Lxc) -> [runc](https://github.com/opencontainers/runc)
 ]
+
 ---
 name: image
-##why?
 ##how?
+##why?
 ![architecture](images/architecture.png)
+
+
+---
+layout: false
+.left-column[
+##how?
+##why?
+]
+
+.right-column[
+
+
+###advantages
+|  | |
+|---|---|
+| isolation  |  no interference |
+| layers | images can share parts with each other
+| fast  |  docker startup: **2sec** <br>virtualbox startup: **35sec** |
+|  dependencies | easy to have multiple versions of same library |
+| versioning | easy tracking of configuration and dependencies
+| production | local development very close to production
+]
 
 
 ---
@@ -121,7 +125,9 @@ our Docker file looks like this:
 
 	EXPOSE  8080
 
-	CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","build/libs/spring-boot-todomvc.jar"]
+	CMD ["java","-Djava.security.egd=file:/dev/./urandom",
+    "-jar","build/libs/spring-boot-todomvc.jar"]
+
 ]
 ---
 
@@ -222,9 +228,24 @@ name: how
 .right-column[
 
 **run**
-`docker-compose up -d` start all services in daemon mode
-`docker-compose run --service-ports db`
+
+`docker-compose up -d`
+
+starts all services in daemon mode
+
+---
+
 `docker-compose run --service-ports app`
+
+starts one service in interactive mode
+
+---
+
+`docker-compose run --service-ports db bash`
+
+starts containter with interactive bash instead of run command
+
+---
 
 **easy  scaling**
 ` docker-compose scale web=2 worker=3`
@@ -232,11 +253,11 @@ name: how
 
 .slides[
   .first[
-  ### container 1
-  web 1
+  ### container 2
+  web 2
   ]
   .second[
-  ### container 2
+  ### container 1
   db 1
   ]
 ]
@@ -246,16 +267,11 @@ for more scaling ...
 ]
 
 ---
-
+name: image
 ## docker swarm
 
----
-name: image
-##why?
-##how?
 
 [![architecture](images/play.png)](https://embed-ssl.wistia.com/deliveries/2a0f6a5e1b77423d85b501aea668b664d4609b1f/file.mp4)
-
 
 ---
 
