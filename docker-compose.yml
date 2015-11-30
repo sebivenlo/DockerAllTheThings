@@ -1,0 +1,24 @@
+app:
+  image: java:8
+  volumes:      #map host folder to docker container
+    - ./spring-boot-todomvc:/app
+  environment:  #set environment variables
+    GRADLE_USER_HOME: /app/.gradle
+    spring.profiles.active: production
+  ports:        #port mapping to host
+    - "8080:8080"
+  links:        #creates network links to other containers
+    - db
+  working_dir: "/app"
+  command: "bash ./gradlew bootRun"
+
+db:
+  image: postgres:latest
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: testdb
+  ports:
+    - "5432:5432"
+  expose:     #make port available to other containers
+    - 5432
